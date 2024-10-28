@@ -1,13 +1,21 @@
-import type { ApiResponse, Person } from "./types";
+import type { Person } from "./types";
+import { faker, Faker, pt_BR } from '@faker-js/faker';
 import { writeFile } from "fs";
 
-async function getPeopleFromAPI(quantity=1000, locale="pt_BR") : Promise<ApiResponse> {
-    const url = new URL("https://fakerapi.it/api/v2/persons");
-    url.searchParams.append("_locale", locale);
-    url.searchParams.append("_quantity", quantity.toString());
 
-    const response = await fetch(url);
-    return await response.json() as ApiResponse;
+function getFromFaker(quantity=1000) : Person[] {
+  const customFaker = new Faker({locale: pt_BR});
+
+  const data = [] as Person[];
+
+  for(let i = 0; i < quantity; i++) {
+    const firstname = customFaker.person.firstName();
+    const phone = customFaker.phone.number({style: "international"});
+
+    data.push({firstname, phone});
+  }
+
+  return data;
 }
 
 async function makeContatcsFile(data: Person[]): Promise<void> {
@@ -27,6 +35,6 @@ async function makeContatcsFile(data: Person[]): Promise<void> {
 }
 
 (async () => {
-    const apiResponse = await getPeopleFromAPI();
-    await makeContatcsFile(apiResponse.data);
+    const data = getFromFaker(1000);
+    await makeContatcsFile(data);
 })();

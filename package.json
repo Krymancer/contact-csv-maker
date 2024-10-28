@@ -12,6 +12,7 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@faker-js/faker": "^9.1.0",
     "@types/node": "^22.8.1",
     "tsx": "^4.19.1"
   }
